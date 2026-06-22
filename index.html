@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunder Mifflin Scranton - Happiness Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        /* Petite touche pour l'ambiance "The Office" (Police type machine à écrire / corporate) */
+        body { font-family: 'Courier New', Courier, monospace; }
+        .office-font { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; }
+    </style>
+</head>
+<body class="bg-[#F3F2EF] text-gray-800 pb-12">
+
+    <header class="bg-[#002A54] text-white py-6 px-4 shadow-md border-b-4 border-[#7BA4DB]">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-black tracking-wider text-center md:text-left office-font">DUNDER MIFFLIN</h1>
+                <p class="text-xs tracking-widest text-[#7BA4DB] font-bold text-center md:text-left">PAPER COMPANY — SCRANTON HAPPINESS PORTAL</p>
+            </div>
+            <div id="quote-box" class="max-w-md bg-[#163D66] p-3 rounded border border-[#7BA4DB] text-center italic text-xs shadow-inner">
+                "Loading Michael Scott's wisdom..."
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600 flex items-center gap-2">👥 COLLÈGUES ACTIFS</h2>
+            <div class="mb-4 flex gap-2">
+                <input type="text" id="p-name" placeholder="Nom du collègue..." class="flex-1 border text-xs p-2 rounded outline-none focus:border-blue-500 bg-gray-50">
+                <button id="btn-add-player" class="bg-[#002A54] text-white text-xs px-3 py-2 font-bold rounded hover:bg-opacity-90">Ajouter</button>
+            </div>
+            <div id="players-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-1">
+                </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2 flex flex-col justify-between">
+            <div>
+                <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">🌤️ STATUT DE L'OPEN SPACE</h2>
+                
+                <div class="bg-blue-50/50 p-3 rounded border border-blue-200 mb-4">
+                    <p class="text-[11px] font-bold text-blue-900 mb-2 uppercase tracking-wide">Modifier mon statut actuel :</p>
+                    <div class="flex flex-col gap-2">
+                        <div class="flex flex-wrap gap-2 items-center">
+                            <select id="mood-user-select" class="border text-xs p-2 rounded bg-white outline-none font-sans min-w-[150px]">
+                                <option value="">-- Qui êtes-vous ? --</option>
+                            </select>
+
+                            <div class="flex gap-1 bg-white p-1 rounded border">
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😀" data-impact="-15">😀</button>
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😊" data-impact="-10">😊</button>
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😐" data-impact="0">😐</button>
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😫" data-impact="20">😫</button>
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😡" data-impact="35">😡</button>
+                                <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="☕" data-impact="-5">☕</button>
+                            </div>
+                        </div>
+                        
+                        <div class="flex gap-1">
+                            <input type="text" id="mood-reason-input" placeholder="Raison de cette humeur..." class="w-full border text-xs p-2 rounded bg-white outline-none">
+                            <button id="btn-save-mood" class="bg-blue-600 text-white text-xs font-bold px-4 rounded hover:bg-blue-700">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="meteo-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">📌 PANNEAU D'AFFICHAGE LÂCHAGE</h2>
+            <div class="mb-4 p-3 bg-amber-50/50 border border-amber-200 rounded flex flex-col gap-2">
+                <textarea id="post-text" placeholder="Une blague, une annonce, une rumeur..." class="border text-xs p-2 rounded bg-white outline-none" rows="2"></textarea>
+                <div class="flex gap-2">
+                    <input type="text" id="post-media" placeholder="Lien d'une image ou d'un GIF (Optionnel)..." class="flex-1 border text-xs p-1.5 rounded bg-white outline-none">
+                    <button id="btn-add-post" class="bg-amber-500 text-white font-bold px-4 text-xs rounded hover:bg-amber-600">Épingler</button>
+                </div>
+            </div>
+            <div id="posts-container" class="flex gap-4 overflow-x-auto pb-2">
+                </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">🙏 KUDOS & DISCRÈTES COMPLIMENTATIONS</h2>
+            <div class="space-y-2 mb-4 bg-green-50/30 p-2 rounded border border-green-200">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="t-from" placeholder="De..." class="border p-1 text-xs rounded bg-white">
+                    <input type="text" id="t-to" placeholder="Pour..." class="border p-1 text-xs rounded bg-white">
+                </div>
+                <textarea id="t-text" placeholder="Merci pour ton aide précieuse sur..." class="border p-1 text-xs rounded w-full bg-white" rows="2"></textarea>
+                <button id="btn-add-thank" class="w-full bg-green-600 text-white text-xs font-bold p-1.5 rounded hover:bg-green-700">Envoyer le merci</button>
+            </div>
+            <div id="thanks-list" class="space-y-2 max-h-[200px] overflow-y-auto pr-1">
+                </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-red-600">🟥 TRIBUNAL DISCIPLINAIRE (DWIGHT SCHRUTE)</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-red-50/30 p-3 rounded border border-red-200 mb-4">
+                <input type="text" id="card-target" placeholder="Cible du carton (ex: Jim Halpert)..." class="border p-1.5 text-xs rounded bg-white">
+                <select id="card-color" class="border p-1.5 text-xs rounded bg-white font-sans">
+                    <option value="Yellow">🟨 Carton Jaune (Avertissement)</option>
+                    <option value="Red">🟥 Carton Rouge (Infraction Majeure)</option>
+                </select>
+                <input type="text" id="card-reason" placeholder="Motif officiel du préjudice..." class="border p-1.5 text-xs rounded bg-white">
+                <input type="text" id="card-pledge" placeholder="Gage compensatoire imposé..." class="border p-1.5 text-xs rounded bg-white">
+                <button id="btn-add-card" class="sm:col-span-2 bg-red-600 text-white font-bold p-1.5 text-xs rounded hover:bg-red-700">Délivrer la sanction</button>
+            </div>
+            <div id="cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs flex flex-col justify-between">
+            <div>
+                <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">🎮 LE PENDU DE SCRANTON</h2>
+                
+                <div id="pendu-setup-zone" class="mb-3">
+                    <p class="text-[10px] text-gray-500 mb-1">Définir le mot secret du jour (6-12 lettres) :</p>
+                    <div class="flex gap-1">
+                        <input type="password" id="pendu-secret-word" placeholder="MOTSECRET" class="border p-1 text-xs uppercase flex-1 bg-white outline-none">
+                        <button id="btn-set-pendu" class="bg-gray-700 text-white text-xs px-2 rounded hover:bg-gray-800">Bloquer</button>
+                    </div>
+                </div>
+
+                <div id="pendu-game-zone" class="space-y-2">
+                    <div class="flex justify-between items-center bg-gray-50 p-2 rounded border">
+                        <pre id="pendu-drawing" class="text-xs font-mono leading-tight text-gray-600">  +---+&#10;  |   |&#10;      |&#10;      |&#10;      |&#10;      |&#10;=========</pre>
+                        <div class="text-right">
+                            <span class="text-[10px] text-gray-400 block">Erreurs max : 6</span>
+                            <span id="pendu-lives" class="text-xs font-bold text-red-600">Vies : 6/6</span>
+                        </div>
+                    </div>
+
+                    <p id="pendu-word-display" class="text-lg font-bold tracking-widest text-center my-3 bg-gray-100 p-2 rounded border font-mono">_ _ _ _ _ _</p>
+                    
+                    <div class="flex gap-1">
+                        <input type="text" id="pendu-letter-in" placeholder="A" maxlength="1" class="border p-1 text-xs text-center font-bold uppercase w-12 bg-white outline-none">
+                        <input type="text" id="pendu-winner-name" placeholder="Votre nom" class="border p-1 text-xs flex-1 bg-white outline-none">
+                        <button id="btn-guess-letter" class="bg-indigo-600 text-white text-xs px-3 rounded hover:bg-indigo-700">Tenter</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-4 pt-2 border-t border-dashed">
+                <span class="text-[10px] font-bold text-indigo-900 block mb-1 uppercase tracking-wider">🏆 Gagnants du jour :</span>
+                <div id="pendu-scoreboard" class="text-[11px] space-y-1 text-gray-600 max-h-[70px] overflow-y-auto">
+                    </div>
+            </div>
+        </section>
+
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-3">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-amber-800">☕ PARIS SUR LA FATALITÉ DE L'OPEN SPACE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-2 bg-amber-50/30 p-3 rounded border border-amber-200 mb-4">
+                <input type="text" id="b-crit" placeholder="Votre nom..." class="border p-1.5 text-xs rounded bg-white">
+                <input type="text" id="b-chal" placeholder="Adversaire (Contre)..." class="border p-1.5 text-xs rounded bg-white">
+                <select id="b-stake" class="border p-1.5 text-xs rounded bg-white font-sans">
+                    <option value="Un bon café de machine ☕">Un bon café de machine ☕</option>
+                    <option value="Un déjeuner complet 🍔">Un déjeuner complet 🍔</option>
+                    <option value="Une viennoiserie le matin 🥐">Une viennoiserie le matin 🥐</option>
+                    <option value="Une canette fraîche 🥤">Une canette fraîche 🥤</option>
+                    <option value="Une tournée de pintes 🍺">Une tournée de pintes 🍺</option>
+                </select>
+                <input type="text" id="b-desc" placeholder="Objet du défi (Ex: Qui arrivera en retard)..." class="border p-1.5 text-xs rounded bg-white md:col-span-2">
+                <button id="btn-add-bet" class="md:col-span-5 bg-amber-800 text-white text-xs font-bold p-2 rounded hover:bg-amber-900">Signer le pacte de pari</button>
+            </div>
+            <div id="bets-list" class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center text-[10px] text-gray-400 mt-12">
+        Dunder Mifflin Paper Company, Inc. Scranton Branch Portal V1.4 — Realtime Database Synchronized
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, setDoc } 
+        from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxhluuagrClX9t7ypI6iICV3Wv96eaoNQ",
+          authDomain: "lovebase-aa157.firebaseapp.com",
+          projectId: "lovebase-aa157",
+          storageBucket: "lovebase-aa157.firebasestorage.app",
+          messagingSenderId: "836300089701",
+          appId: "1:836300089701:web:97ade7398389822c6c198c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- CITATIONS DE MICHAEL SCOTT ---
+        const quotes = [
+            "I'm not superstitious, but I am a little stitious.",
+            "Would I rather be feared or loved? Easy. Both. I want people to be afraid of how much they love me.",
+            "Sometimes I'll start a sentence and I don't even know where it's going.",
+            "I am running away from my responsibilities. And it feels good.",
+            "The worst thing about prison was the Dementors.",
+            "I love inside jokes. I'd love to be a part of one someday.",
+            "Toby is in HR, so he's not really a part of our family."
+        ];
+        document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+        let localSelectedEmoji = "😐";
+        let localScoreImpact = 0;
+        let cachedPlayersList = [];
+
+        // --- AJOUTER COLLÈGUE ---
+        document.getElementById('btn-add-player').addEventListener('click', async () => {
+            const input = document.getElementById('p-name');
+            if(!input.value.trim()) return;
+            await addDoc(collection(db, "players"), { 
+                name: input.value.trim(), 
+                mood: "😐", 
+                moodText: "Arrive au bureau", 
+                love: 0,
+                score: 40 
+            });
+            input.value = "";
+        });
+
+        // --- SELECTION EMOJI ---
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('bg-blue-1
