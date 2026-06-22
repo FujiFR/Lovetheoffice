@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dunder Mifflin Scranton - Happiness Portal</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; }
+        .office-font { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-weight: 900; }
+    </style>
+</head>
+<body class="bg-[#F3F2EF] text-gray-800 pb-12">
+
+    <header class="bg-[#002A54] text-white py-6 px-4 shadow-md border-b-4 border-[#7BA4DB]">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-3xl font-black tracking-wider text-center md:text-left office-font">DUNDER MIFFLIN</h1>
+                <p class="text-xs tracking-widest text-[#7BA4DB] font-bold text-center md:text-left">PAPER COMPANY — SCRANTON HAPPINESS PORTAL</p>
+            </div>
+            <div id="quote-box" class="max-w-md bg-[#163D66] p-3 rounded border border-[#7BA4DB] text-center italic text-xs shadow-inner">
+                "Loading Michael Scott's wisdom..."
+            </div>
+        </div>
+    </header>
+
+    <main class="max-w-6xl mx-auto px-4 mt-8 grid grid-cols-1 lg:grid-cols-3 gap-6">
+        
+        <!-- COLLÈGUES -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600 flex items-center gap-2">👥 COLLÈGUES ACTIFS</h2>
+            <div class="mb-4 flex gap-2">
+                <input type="text" id="p-name" placeholder="Nom du collègue..." class="flex-1 border text-xs p-2 rounded outline-none focus:border-blue-500 bg-gray-50">
+                <button id="btn-add-player" class="bg-[#002A54] text-white text-xs px-3 py-2 font-bold rounded hover:bg-opacity-90">Ajouter</button>
+            </div>
+            <div id="players-list" class="space-y-3 max-h-[400px] overflow-y-auto pr-1"></div>
+        </section>
+
+        <!-- STATUT OPEN SPACE -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2 flex flex-col justify-between">
+            <div>
+                <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">🌤️ STATUT DE L'OPEN SPACE</h2>
+                
+                <div class="bg-blue-50/50 p-3 rounded border border-blue-200 mb-4">
+                    <p class="text-[11px] font-bold text-blue-900 mb-2 uppercase tracking-wide">Qui êtes-vous ? (Sélectionnez pour mettre à jour)</p>
+                    <select id="current-user-select" class="w-full border text-xs p-2 rounded bg-white mb-3 outline-none">
+                        <option value="">-- Choisissez votre profil --</option>
+                    </select>
+
+                    <p class="text-[11px] font-bold text-blue-900 mb-2 uppercase tracking-wide">Modifier mon statut actuel :</p>
+                    <div class="flex flex-wrap gap-2 items-center">
+                        <div class="flex gap-1 bg-white p-1 rounded border">
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😀">😀</button>
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😊">😊</button>
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😐">😐</button>
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😫">😫</button>
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="😡">😡</button>
+                            <button class="mood-btn text-xl p-1 rounded hover:bg-gray-100" data-emoji="☕">☕</button>
+                        </div>
+                        
+                        <div class="flex-1 min-w-[180px] flex gap-1">
+                            <input type="text" id="mood-reason-input" placeholder="Raison de cette humeur..." class="w-full border text-xs p-2 rounded bg-white outline-none">
+                            <button id="btn-save-mood" class="bg-blue-600 text-white text-xs font-bold px-3 rounded hover:bg-blue-700">Enregistrer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="meteo-grid" class="grid grid-cols-2 sm:grid-cols-4 gap-2"></div>
+        </section>
+
+        <!-- LÂCHAGE -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">📌 PANNEAU D'AFFICHAGE LÂCHAGE</h2>
+            <div class="mb-4 p-3 bg-amber-50/50 border border-amber-200 rounded flex flex-col gap-2">
+                <textarea id="post-text" placeholder="Une blague, une annonce, une rumeur..." class="border text-xs p-2 rounded bg-white outline-none" rows="2"></textarea>
+                <div class="flex gap-2">
+                    <input type="text" id="post-media" placeholder="Lien d'une image ou d'un GIF (Optionnel)..." class="flex-1 border text-xs p-1.5 rounded bg-white outline-none">
+                    <button id="btn-add-post" class="bg-amber-500 text-white font-bold px-4 text-xs rounded hover:bg-amber-600">Épingler</button>
+                </div>
+            </div>
+            <div id="posts-container" class="flex gap-4 overflow-x-auto pb-2"></div>
+        </section>
+
+        <!-- KUDOS -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-gray-600">🙏 KUDOS & DISCRÈTES COMPLIMENTATIONS</h2>
+            <div class="space-y-2 mb-4 bg-green-50/30 p-2 rounded border border-green-200">
+                <div class="grid grid-cols-2 gap-2">
+                    <input type="text" id="t-from" placeholder="De..." class="border p-1 text-xs rounded bg-white">
+                    <input type="text" id="t-to" placeholder="Pour..." class="border p-1 text-xs rounded bg-white">
+                </div>
+                <textarea id="t-text" placeholder="Merci pour ton aide précieuse sur..." class="border p-1 text-xs rounded w-full bg-white" rows="2"></textarea>
+                <button id="btn-add-thank" class="w-full bg-green-600 text-white text-xs font-bold p-1.5 rounded hover:bg-green-700">Envoyer le merci</button>
+            </div>
+            <div id="thanks-list" class="space-y-2 max-h-[200px] overflow-y-auto pr-1"></div>
+        </section>
+
+        <!-- TRIBUNAL DISCIPLINAIRE -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-2">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-red-600">🟥 TRIBUNAL DISCIPLINAIRE (DWIGHT SCHRUTE)</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-red-50/30 p-3 rounded border border-red-200 mb-4">
+                <input type="text" id="card-target" placeholder="Cible du carton (ex: Jim Halpert)..." class="border p-1.5 text-xs rounded bg-white">
+                <select id="card-color" class="border p-1.5 text-xs rounded bg-white font-sans">
+                    <option value="Yellow">🟨 Carton Jaune (Avertissement)</option>
+                    <option value="Red">🟥 Carton Rouge (Infraction Majeure)</option>
+                </select>
+                <input type="text" id="card-reason" placeholder="Motif officiel du préjudice..." class="border p-1.5 text-xs rounded bg-white">
+                <input type="text" id="card-pledge" placeholder="Gage compensatoire imposé..." class="border p-1.5 text-xs rounded bg-white">
+                <button id="btn-add-card" class="sm:col-span-2 bg-red-600 text-white font-bold p-1.5 text-xs rounded hover:bg-red-700">Délivrer la sanction</button>
+            </div>
+            <div id="cards-list" class="grid grid-cols-1 md:grid-cols-2 gap-3"></div>
+        </section>
+
+        <!-- JEU DU PENDU -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-indigo-800">🪓 LE PENDU DE SCRANTON</h2>
+            
+            <!-- Définir le mot -->
+            <div id="hangman-setup" class="mb-4 p-2 bg-indigo-50 border border-indigo-200 rounded">
+                <p class="text-[10px] font-bold text-indigo-900 uppercase mb-1">Définir le mot secret du jour :</p>
+                <div class="flex gap-1">
+                    <input type="password" id="hangman-word-input" placeholder="MOT" class="border p-1 text-xs uppercase flex-1 bg-white outline-none">
+                    <button id="btn-set-hangman" class="bg-indigo-600 text-white text-xs px-2 rounded hover:bg-indigo-700">Bloquer</button>
+                </div>
+            </div>
+
+            <!-- Aire de Jeu -->
+            <div id="hangman-game" class="text-center space-y-3 hidden">
+                <div id="hangman-display" class="text-xl font-bold tracking-widest text-gray-700 font-mono my-2"></div>
+                <p id="hangman-status" class="text-[11px] text-gray-500 italic"></p>
+                
+                <!-- Clavier -->
+                <div id="hangman-keyboard" class="grid grid-cols-7 gap-1 max-w-xs mx-auto"></div>
+            </div>
+
+            <!-- Classement -->
+            <div class="mt-4 pt-2 border-t border-gray-200">
+                <p class="text-[11px] font-bold text-gray-600 uppercase">🏆 Gagnants du jour :</p>
+                <ul id="hangman-leaderboard" class="text-xs text-gray-500 list-disc list-inside mt-1"></ul>
+            </div>
+        </section>
+
+        <!-- PARIS DE L'OPEN SPACE -->
+        <section class="bg-white p-4 rounded border border-gray-300 shadow-xs lg:col-span-3">
+            <h2 class="text-sm font-bold border-b pb-2 mb-4 text-amber-800">☕ PARIS SUR LA FATALITÉ DE L'OPEN SPACE</h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-2 bg-amber-50/30 p-3 rounded border border-amber-200 mb-4">
+                <input type="text" id="b-crit" placeholder="Votre nom..." class="border p-1.5 text-xs rounded bg-white">
+                <input type="text" id="b-chal" placeholder="Adversaire (Contre)..." class="border p-1.5 text-xs rounded bg-white">
+                <input type="text" id="b-desc" placeholder="Objet du défi (Ex: Qui arrivera en retard)..." class="border p-1.5 text-xs rounded bg-white md:col-span-2">
+                <select id="b-stake" class="border p-1.5 text-xs rounded bg-white font-sans">
+                    <option value="un café ☕">☕ Un café</option>
+                    <option value="un déj 🍔">🍔 Un déj</option>
+                    <option value="une bière 🍺">🍺 Une bière</option>
+                    <option value="une rame de papier 📄">📄 Une rame de papier</option>
+                </select>
+                <button id="btn-add-bet" class="md:col-span-5 bg-amber-800 text-white text-xs font-bold p-2 rounded hover:bg-amber-900">Signer le pacte de pari</button>
+            </div>
+            <div id="bets-list" class="grid grid-cols-1 md:grid-cols-3 gap-3"></div>
+        </section>
+
+    </main>
+
+    <footer class="text-center text-[10px] text-gray-400 mt-12">
+        Dunder Mifflin Paper Company, Inc. Scranton Branch Portal V2.0 — Realtime Database Synchronized
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, onSnapshot, addDoc, updateDoc, doc, setDoc } 
+        from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+          apiKey: "AIzaSyBxhluuagrClX9t7ypI6iICV3Wv96eaoNQ",
+          authDomain: "lovebase-aa157.firebaseapp.com",
+          projectId: "lovebase-aa157",
+          storageBucket: "lovebase-aa157.firebasestorage.app",
+          messagingSenderId: "836300089701",
+          appId: "1:836300089701:web:97ade7398389822c6c198c"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // --- CITATIONS ---
+        const quotes = [
+            "I'm not superstitious, but I am a little stitious.",
+            "Would I rather be feared or loved? Easy. Both. I want people to be afraid of how much they love me.",
+            "Sometimes I'll start a sentence and I don't even know where it's going.",
+            "I am running away from my responsibilities. And it feels good.",
+            "The worst thing about prison was the Dementors.",
+            "Toby is in HR, so he's not really a part of our family."
+        ];
+        document.getElementById('quote-box').innerText = `"${quotes[Math.floor(Math.random() * quotes.length)]}"`;
+
+        let localSelectedEmoji = "😐";
+
+        // Ajout d'un employé
+        document.getElementById('btn-add-player').addEventListener('click', async () => {
+            const input = document.getElementById('p-name');
+            if(!input.value.trim()) return;
+            await addDoc(collection(db, "players"), { 
+                name: input.value.trim(), 
+                mood: "😐", 
+                moodText: "Arrive au bureau", 
+                love: 0,
+                score: 0,
+                history: []
+            });
+            input.value = "";
+        });
+
+        // Clic émoji
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('bg-blue-100', 'font-bold'));
+                e.target.classList.add('bg-blue-100', 'font-bold');
+                localSelectedEmoji = e.target.getAttribute('data-emoji');
+            });
+        });
+
+        // Enregistrer l'humeur
+        document.getElementById('btn-save-mood').addEventListener('click', async () => {
+            const userId = document.getElementById('current-user-select').value;
+            const textInput = document.getElementById('mood-reason-input');
+            const txt = textInput.value.trim() || "Gère les dossiers clients";
+            
+            if(!userId) {
+                alert("Veuillez sélectionner votre nom avant d'enregistrer.");
+                return;
+            }
+
+            onSnapshot(doc(db, "players", userId), async (snap) => {
+                if(snap.exists()) {
+                    const data = snap.data();
+                    const currentHistory = data.history || [];
+                    const currentScore = data.score || 0;
+                    
+                    // Ajout à l'historique invisible & attribution de +10 points d'humeur
+                    currentHistory.push({ mood: localSelectedEmoji, text: txt, date: new Date().toISOString() });
+                    
+                    await updateDoc(doc(db, "players", userId), { 
+                        mood: localSelectedEmoji, 
+                        moodText: txt,
+                        score: currentScore + 10,
+                        history: currentHistory
+                    });
+                    textInput.value = "";
+                }
+            }, { onlyOnce: true });
+        });
+
+        // Ajout Post-it
+        document.getElementById('btn-add-post').addEventListener('click', async () => {
+            const text = document.getElementById('post-text').value.trim();
+            const media = document.getElementById('post-media').value.trim();
+            if(!text) return;
+            await addDoc(collection(db, "posts"), { text, media, comments: [] });
+            document.getElementById('post-text').value = ""; document.getElementById('post-media').value = "";
+        });
+
+        // Ajout Kudos
+        document.getElementById('btn-add-thank').addEventListener('click', async () => {
+            const from = document.getElementById('t-from').value.trim();
+            const to = document.getElementById('t-to').value.trim();
+            const text = document.getElementById('t-text').value.trim();
+            if(!from || !text) return;
+            await addDoc(collection(db, "thanks"), { from, to: to || "Tout le bureau", text });
+            document.getElementById('t-from').value = ""; document.getElementById('t-to').value = ""; document.getElementById('t-text').value = "";
+        });
+
+        // Ajout Carton Dwight
+        document.getElementById('btn-add-card').addEventListener('click', async () => {
+            const target = document.getElementById('card-target').value.trim();
+            const color = document.getElementById('card-color').value;
+            const reason = document.getElementById('card-reason').value.trim();
+            const pledge = document.getElementById('card-pledge').value.trim();
+            if(!target || !reason) return;
+            await addDoc(collection(db, "cards"), { target, color, reason, pledge: pledge || "Aucun", contested: false, contestReason: "", votesYes: 0, votesNo: 0, status: "En attente" });
+            document.getElementById('card-target').value = ""; document.getElementById('card-reason').value = ""; document.getElementById('card-pledge').value = "";
+        });
+
+        // Ajout Pari
+        document.getElementById('btn-add-bet').addEventListener('click', async () => {
+            const creator = document.getElementById('b-crit').value.trim() || "Anonyme";
+            const challenger = document.getElementById('b-chal').value.trim() || "Quelqu'un";
+            const description = document.getElementById('b-desc').value.trim();
+            const stake = document.getElementById('b-stake').value;
+            if(!description) return;
+            await addDoc(collection(db, "bets"), { creator, challenger, description: `${description} (Mise : ${stake})`, status: "Ouvert" });
+            document.getElementById('b-desc').value = ""; document.getElementById('b-crit').value = ""; document.getElementById('b-chal').value = "";
+        });
+
+        // ACTIONS GLOBALES WINDOW
+        window.boostLove = async (id, currentLove) => {
+            await updateDoc(doc(db, "players", id), { love: parseInt(currentLove) + 1 });
+        };
+
+        window.sendComment = async (id, currentCommentsString, inputId) => {
+            const input = document.getElementById(inputId);
+            if(!input || !input.value.trim()) return;
+            const arr = JSON.parse(currentCommentsString);
+            arr.push(input.value.trim());
+            await updateDoc(doc(db, "posts", id), { comments: arr });
+            input.value = "";
+        };
+
+        // Remplacement du PopUp de contestation par apparition de conteneur en direct
+        window.toggleContestField = (id) => {
+            const field = document.getElementById(`contest-field-${id}`);
+            if(field) field.classList.toggle('hidden');
+        };
+
+        window.submitContest = async (id) => {
+            const r = document.getElementById(`contest-input-${id}`).value.trim();
+            if(r) await updateDoc(doc(db, "cards", id), { contested: true, contestReason: r });
+        };
+
+        window.resolveCard = async (id) => {
+            await updateDoc(doc(db, "cards", id), { status: "Résolu ✅" });
+        };
+
+        window.vote = async (id, currentYes, currentNo, side) => {
+            let yes = parseInt(currentYes) + (side === 'yes' ? 1 : 0);
+            let no = parseInt(currentNo) + (side === 'no' ? 1 : 0);
+            let status = "En attente";
+            if((yes + no) >= 2) status = yes > no ? "Maintenu" : "Annulé 🕊️";
+            await updateDoc(doc(db, "cards", id), { votesYes: yes, votesNo: no, status });
+        };
+
+        window.cloturerBet = async (id) => {
+            await updateDoc(doc(db, "bets", id), { status: "Fermé ☕" });
+        };
+
+        // --- LOGIQUE JEU DU PENDU ---
+        const todayStr = new Date().toISOString().split('T')[0];
+        
+        document.getElementById('btn-set-hangman').addEventListener('click', async () => {
+            const word = document.getElementById('hangman-word-input').value.toUpperCase().replace(/[^A-Z]/g, '');
+            if(!word || word.length < 3) return alert('Mot invalide (3 lettres min)');
+            
+            await setDoc(doc(db, "hangman", todayStr), {
+                word: word,
+                guessedLetters: [],
+                winners: []
+            });
+        });
+
+        window.guessLetter = async (letter) => {
+            const name = document.getElementById('current-user-select').options[document.getElementById('current-user-select').selectedIndex]?.text;
+            if(!name || name.includes('--')) return alert('Sélectionnez d’abord votre nom dans la section Statut !');
+
+            onSnapshot(doc(db, "hangman", todayStr), async (snap) => {
+                if(!snap.exists()) return;
+                const data = snap.data();
+                let guessed = data.guessedLetters || [];
+                let winners = data.winners || [];
+
+                if(!guessed.includes(letter)) {
+                    guessed.push(letter);
+                    
+                    // Vérifier si le mot complet est découvert
+                    const wordLetters = data.word.split('');
+                    const isWon = wordLetters.every(l => guessed.includes(l));
+                    if(isWon && !winners.includes(name)) {
+                        winners.push(name);
+                    }
+
+                    await updateDoc(doc(db, "hangman", todayStr), {
+                        guessedLetters: guessed,
+                        winners: winners
+                    });
+                }
+            }, { onlyOnce: true });
+        };
+
+        // Écouteur Pendu en temps réel
+        onSnapshot(doc(db, "hangman", todayStr), (snap) => {
+            const setupDiv = document.getElementById('hangman-setup');
+            const gameDiv = document.getElementById('hangman-game');
+            const displayDiv = document.getElementById('hangman-display');
+            const keyboardDiv = document.getElementById('hangman-keyboard');
+            const statusP = document.getElementById('hangman-status');
+            const leaderboard = document.getElementById('hangman-leaderboard');
+
+            if(!snap.exists()) {
+                setupDiv.classList.remove('hidden');
+                gameDiv.classList.add('hidden');
+                return;
+            }
+
+            setupDiv.classList.add('hidden');
+            gameDiv.classList.remove('hidden');
+
+            const data = snap.data();
+            const word = data.word;
+            const guessed = data.guessedLetters || [];
+            const winners = data.winners || [];
+
+            // Calcul des erreurs
+            const errors = guessed.filter(l => !word.includes(l)).length;
+            statusP.innerText = `Erreurs : ${errors}/7`;
+
+            // Affichage des tirets
+            displayDiv.innerText = word.split('').map(l => guessed.includes(l) ? l : '_').join(' ');
+
+            // Rendu Clavier
+            keyboardDiv.innerHTML = "";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').forEach(l => {
+                const used = guessed.includes(l);
+                keyboardDiv.innerHTML += `
+                    <button onclick="guessLetter('${l}')" ${used ? 'disabled' : ''} class="text-xs p-1 rounded border text-center font-bold font-sans ${used ? 'bg-gray-200 text-gray-400' : 'bg-indigo-100 hover:bg-indigo-200 text-indigo-800'}">
+                        ${l}
+                    </button>
+                `;
+            });
+
+            // Rendu Gagnants
+            leaderboard.innerHTML = winners.length ? winners.map(w => `<li>${w} 🎯</li>`).join('') : "Personne n'a encore trouvé.";
+        });
+
+
+        // --- FLUX DE RENDU DES COLLEGS & SELECTEUR ---
+        onSnapshot(collection(db, "players"), (snapshot) => {
+            const container = document.getElementById('players-list');
+            const gridMeteo = document.getElementById('meteo-grid');
+            const selector = document.getElementById('current-user-select');
+            
+            if(!container || !gridMeteo || !selector) return;
+            
+            const currentSelectedValue = selector.value;
+            container.innerHTML = "";
+            gridMeteo.innerHTML = "";
+            selector.innerHTML = `<option value="">-- Choisissez votre profil --</option>`;
+            
+            snapshot.docs.forEach(docSnap => {
+                const p = docSnap.data();
+                const id = docSnap.id;
+
+                selector.innerHTML += `<option value="${id}">${p.name}</option>`;
+
+                container.innerHTML += `
+                    <div class="p-3 border rounded bg-gray-50 flex flex-col justify-between shadow-xs">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-sm">${p.name} <span class="text-[10px] text-indigo-500 font-normal">(${p.score || 0} pts)</span></span>
+                            <span class="text-xl">${p.mood || '😐'}</span>
+                        </div>
+                        <p class="text-[11px] text-gray-500 italic my-1">"${p.moodText || 'Working...'}"</p>
+                        <button onclick="boostLove('${id}', ${p.love || 0})" class="bg-red-100 text-red-700 text-[10px] px-2 py-0.5 rounded font-bold w-max mt-1 hover:bg-red-200 transition">
+                            ❤️ Love (${p.love || 0})
+                        </button>
+                    </div>
+                `;
+
+                gridMeteo.innerHTML += `
+                    <div class="p-3 border rounded text-center bg-blue-50/50 shadow-inner">
+                        <div class="text-2xl mb-1">${p.mood || '😐'}</div>
+                        <div class="font-bold text-[11px] truncate">${p.name}</div>
+                    </div>
+                `;
+            });
+
+            selector.value = currentSelectedValue;
+        });
+
+        // Post-its
+        onSnapshot(collection(db, "posts"), (snapshot) => {
+            const container = document.getElementById('posts-container');
+            if(!container) return;
+            container.innerHTML = "";
+            snapshot.docs.forEach(docSnap => {
+                const post = docSnap.data();
+                const id = docSnap.id;
+                let commentsHtml = "";
+                post.comments?.forEach(c => { commentsHtml += `<p class="bg-white/70 p-1 rounded my-1 text-[11px]">💬 ${c}</p>`; });
+                const inputId = `input-${id}`;
+                const rawJsonString = JSON.stringify(post.comments || []).replace(/"/g, '&quot;');
+                container.innerHTML += `
+                    <div class="min-w-[240px] max-w-[240px] bg-amber-100 p-4 rounded shadow-md border-b-4 border-amber-300">
+                        <div>
+                            <p class="text-xs font-semibold text-gray-700 leading-tight">${post.text}</p>
+                            ${post.media ? `<img src="${post.media}" class="w-full h-24 object-cover rounded my-2 border bg-white" onerror="this.style.display='none'" />` : ''}
+                        </div>
+                        <div class="border-t pt-2 mt-2 border-amber-200">
+                            <div class="max-h-20 overflow-y-auto mb-2 pr-0.5">${commentsHtml}</div>
+                            <div class="flex gap-1">
+                                <input type="text" id="${inputId}" placeholder="Répondre..." class="w-full text-xs p-1 rounded border bg-white outline-none">
+                                <button onclick="sendComment('${id}', '${rawJsonString}', '${inputId}')" class="bg-amber-600 text-white text-xs px-2 rounded">📤</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        });
+
+        // Cartons & Dwight
+        onSnapshot(collection(db, "cards"), (snapshot) => {
+            const container = document.getElementById('cards-list');
+            if(!container) return;
+            container.innerHTML = "";
+            snapshot.docs.forEach(docSnap => {
+                const c = docSnap.data();
+                const id = docSnap.id;
+
+                container.innerHTML += `
+                    <div class="p-3 border rounded shadow-sm ${c.color === 'Red' ? 'bg-red-50 border-red-200' : 'bg-yellow-50 border-yellow-200'}">
+                        <div class="flex justify-between font-bold text-xs">
+                            <span>${c.color === 'Red' ? '🟥' : '🟨'} Pour ${c.target}</span>
+                            <span class="bg-white px-1.5 rounded text-[10px] border">${c.status}</span>
+                        </div>
+                        <p class="text-xs my-1"><strong>Motif :</strong> ${c.reason}</p>
+                        <p class="text-xs text-purple-950 font-semibold"><strong>Gage :</strong> ${c.pledge}</p>
+                        
+                        <!-- Actions boutons intégrés -->
+                        <div class="mt-2 flex gap-1 flex-wrap">
+                            ${c.status === 'En attente' && !c.contested ? `
+                                <button onclick="toggleContestField('${id}')" class="bg-orange-500 text-white text-[10px] px-2 py-0.5 rounded font-bold hover:bg-orange-600">Contester ✋</button>
+                            ` : ''}
+                            ${c.status === 'En attente' || c.status === 'Maintenu' ? `
+                                <button onclick="resolveCard('${id}')" class="bg-green-600 text-white text-[10px] px-2 py-0.5 rounded font-bold hover:bg-green-700">Résolu ✅</button>
+                            ` : ''}
+                        </div>
+
+                        <!-- Formulaire Inline de contestation caché par défaut -->
+                        <div id="contest-field-${id}" class="mt-2 hidden bg-white p-2 rounded border border-gray-300">
+                            <textarea id="contest-input-${id}" placeholder="Pourquoi contestez-vous ?" class="w-full text-xs p-1 border rounded outline-none" rows="1"></textarea>
+                            <button onclick="submitContest('${id}')" class="mt-1 w-full bg-orange-500 text-white text-[10px] py-0.5 rounded font-bold">Soumettre</button>
+                        </div>
+
+                        ${c.contested && c.status === 'En attente' ? `
+                            <div class="mt-2 p-1.5 bg-white/80 rounded text-[11px]">
+                                <p class="text-orange-700 italic">"Contestation : ${c.contestReason}"</p>
+                                <div class="mt-1 flex gap-2">
+                                    <button onclick="vote('${id}', ${c.votesYes}, ${c.votesNo}, 'yes')" class="bg-green-600 text-white px-2 py-0.5 rounded text-[10px]">Maintenir (${c.votesYes})</button>
+                                    <button onclick="vote('${id}', ${c.votesYes}, ${c.votesNo}, 'no')" class="bg-gray-500 text-white px-2 py-0.5 rounded text-[10px]">Annuler (${c.votesNo})</button>
+                                </div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            });
+        });
+
+        // Kudos
+        onSnapshot(collection(db, "thanks"), (snapshot) => {
+            const container = document.getElementById('thanks-list');
+            if(!container) return;
+            container.innerHTML = "";
+            snapshot.docs.forEach(docSnap => {
+                const t = docSnap.data();
+                container.innerHTML += `
+                    <div class="p-2 bg-green-50/50 border border-green-200 rounded text-xs">
+                        <div class="flex justify-between font-semibold text-gray-500 text-[9px] mb-0.5"><span>De: ${t.from}</span><span>Pour: ${t.to}</span></div>
+                        <p class="italic">"${t.text}"</p>
+                    </div>
+                `;
+            });
+        });
+
+        // Paris
+        onSnapshot(collection(db, "bets"), (snapshot) => {
+            const container = document.getElementById('bets-list');
+            if(!container) return;
+            container.innerHTML = "";
+            snapshot.docs.forEach(docSnap => {
+                const b = docSnap.data();
+                const id = docSnap.id;
+                container.innerHTML += `
+                    <div class="p-3 bg-amber-50/50 border border-amber-200 rounded text-xs flex flex-col justify-between shadow-2xs">
+                        <div>
+                            <span class="font-bold text-amber-900">🤝 ${b.creator} VS ${b.challenger}</span>
+                            <p class="text-gray-600 mt-1">${b.description}</p>
+                        </div>
+                        <button onclick="cloturerBet('${id}')" ${b.status !== 'Ouvert' ? 'disabled' : ''} class="mt-2 text-[10px] py-1 rounded font-bold text-center w-full ${b.status === 'Ouvert' ? 'bg-amber-800 text-white hover:bg-amber-900' : 'bg-gray-100 text-gray-400 cursor-not-allowed'}">
+                            ${b.status === 'Ouvert' ? '☕ Clôturer (Pari Validé)' : 'Pari Réglé'}
+                        </button>
+                    </div>
+                `;
+            });
+        });
+    </script>
+</body>
+</html>
